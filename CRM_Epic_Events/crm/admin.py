@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import Company, Client, Contract, Contract_Status, Event, Event_Status
 
-# Register your models here.
+admin.site.register([Company, Client, Contract, Event])
