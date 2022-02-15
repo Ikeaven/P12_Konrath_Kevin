@@ -14,6 +14,9 @@ class Company(models.Model):
     def __str__(self) -> str:
         return self.company_name
 
+    def set_customer_to_true(self):
+        Company.objects.filter(pk=self.pk).update(customer=True)
+
 
 class Client(models.Model):
     first_name = models.CharField(max_length=25)
@@ -53,13 +56,20 @@ class Contract(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    contract_status = models.OneToOneField(Contract_Status, on_delete=models.PROTECT)
+    contract_status = models.ForeignKey(
+        Contract_Status, on_delete=models.PROTECT, default=0
+    )
     amount = models.FloatField()
     payment_due = models.DateField()
 
     def __str__(self) -> str:
         creation_date = date.strftime(self.date_created, "%d-%m-%Y, %H:%M:%S")
         return f"Contrat passé avec : {self.client} à date du {creation_date}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+        company = Company.objects.get(pk=self.client.company.pk)
+        company.set_customer_to_true()
 
 
 class Event_Status(models.Model):
@@ -77,7 +87,7 @@ class Event_Status(models.Model):
 
 
 class Event(models.Model):
-    contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     support_contact = models.ForeignKey(
@@ -87,7 +97,7 @@ class Event(models.Model):
         null=True,
         on_delete=models.PROTECT,
     )
-    event_status = models.OneToOneField(Event_Status, on_delete=models.PROTECT)
+    event_status = models.ForeignKey(Event_Status, on_delete=models.PROTECT, default=0)
     attendees = models.PositiveIntegerField(null=True, blank=True)
     event_date = models.DateTimeField(blank=True, null=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
