@@ -90,7 +90,7 @@ class ClientFilteredBySales(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ClientConsumerList(generics.ListAPIView):
+class ClientCustomerList(generics.ListAPIView):
     """
     This view show all customer or not yet, your choice !
     """
@@ -138,7 +138,6 @@ class ContractViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
-# FIXME
 class ContractListBySales(generics.ListAPIView):
     """
     This view show all contract for a client
@@ -154,7 +153,6 @@ class ContractListBySales(generics.ListAPIView):
         return Response(serializer.data)
 
 
-# FIXME
 class ContractListByClient(generics.ListAPIView):
     """
     This view show all contract for a client

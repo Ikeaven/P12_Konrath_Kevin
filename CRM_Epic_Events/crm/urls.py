@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 from crm.views import (
     ClientFilteredBySales,
-    ClientConsumerList,
+    ClientCustomerList,
     ContractListBySales,
     ContractListByClient,
 )
@@ -23,7 +23,7 @@ urlpatterns = [
     ),
     path(
         "clients/customer/<int:int>",
-        ClientConsumerList.as_view(),
+        ClientCustomerList.as_view(),
         name="client-customer",
     ),
     path(
