@@ -1,5 +1,8 @@
 # from django.shortcuts import render
+
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
+
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -31,27 +34,27 @@ class CompanyViewSet(viewsets.ModelViewSet):
     ]
 
     def update(self, request, pk, *args, **kwargs):
-        company = Company.objects.get(pk=pk)
-        if company:
+        try:
+            company = Company.objects.get(pk=pk)
             self.check_object_permissions(request, company)
             return super().update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Company not found !")
 
     def partial_update(self, request, pk, *args, **kwargs):
-        company = Company.objects.get(pk=pk)
-        if company:
+        try:
+            company = Company.objects.get(pk=pk)
             self.check_object_permissions(request, company)
             return super().partial_update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Company not found !")
 
     def destroy(self, request, pk, *args, **kwargs):
-        company = Company.objects.get(pk=pk)
-        if company:
+        try:
+            company = Company.objects.get(pk=pk)
             self.check_object_permissions(request, company)
             return super().destroy(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Company not found !")
 
 
@@ -69,27 +72,28 @@ class ClientViewSet(viewsets.ModelViewSet):
     ]
 
     def update(self, request, pk, *args, **kwargs):
-        client = Client.objects.get(pk=pk)
-        if client:
+        try:
+            client = Client.objects.get(pk=pk)
             self.check_object_permissions(request, client)
             return super().update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Client not found !")
 
     def partial_update(self, request, pk, *args, **kwargs):
-        client = Client.objects.get(pk=pk)
-        if client:
+        try:
+            client = Client.objects.get(pk=pk)
             self.check_object_permissions(request, client)
             return super().partial_update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Client not found !")
 
     def destroy(self, request, pk, *args, **kwargs):
-        client = Client.objects.get(pk=pk)
-        if client:
+        try:
+            client = Client.objects.get(pk=pk)
             self.check_object_permissions(request, client)
             return super().destroy(request, *args, **kwargs)
-        else:
+
+        except ObjectDoesNotExist:
             raise NotFound(detail="Client not found !")
 
 
@@ -177,27 +181,27 @@ class ContractViewSet(viewsets.ModelViewSet):
     ]
 
     def update(self, request, pk, *args, **kwargs):
-        contract = Contract.objects.get(pk=pk)
-        if contract:
+        try:
+            contract = Contract.objects.get(pk=pk)
             self.check_object_permissions(request, contract)
             return super().update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Contract not found !")
 
     def partial_update(self, request, pk, *args, **kwargs):
-        contract = Contract.objects.get(pk=pk)
-        if contract:
+        try:
+            contract = Contract.objects.get(pk=pk)
             self.check_object_permissions(request, contract)
             return super().partial_update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Contract not found !")
 
     def destroy(self, request, pk, *args, **kwargs):
-        contract = Contract.objects.get(pk=pk)
-        if contract:
+        try:
+            contract = Contract.objects.get(pk=pk)
             self.check_object_permissions(request, contract)
             return super().destroy(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Contract not found !")
 
 
@@ -328,27 +332,27 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, EventIsAdminOrSupportOwner]
 
     def update(self, request, pk, *args, **kwargs):
-        event = Event.objects.get(pk=pk)
-        if event:
+        try:
+            event = Event.objects.get(pk=pk)
             self.check_object_permissions(request, event)
             return super().update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Event not found !")
 
     def partial_update(self, request, pk, *args, **kwargs):
-        event = Event.objects.get(pk=pk)
-        if event:
+        try:
+            event = Event.objects.get(pk=pk)
             self.check_object_permissions(request, event)
             return super().partial_update(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Event not found !")
 
     def destroy(self, request, pk, *args, **kwargs):
-        event = Event.objects.get(pk=pk)
-        if event:
+        try:
+            event = Event.objects.get(pk=pk)
             self.check_object_permissions(request, event)
             return super().destroy(request, *args, **kwargs)
-        else:
+        except ObjectDoesNotExist:
             raise NotFound(detail="Event not found !")
 
 

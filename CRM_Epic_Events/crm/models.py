@@ -24,7 +24,7 @@ class Client(models.Model):
     email = models.CharField(max_length=100, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
     mobile = models.CharField(max_length=20, blank=True, null=True)
-    company = models.ForeignKey(Company, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     sales_contact = models.ForeignKey(
