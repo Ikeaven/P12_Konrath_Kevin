@@ -32,7 +32,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk, *args, **kwargs):
         company = Company.objects.get(pk=pk)
-        if company.exists():
+        if company:
             self.check_object_permissions(request, company)
             return super().update(request, *args, **kwargs)
         else:
@@ -40,7 +40,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, pk, *args, **kwargs):
         company = Company.objects.get(pk=pk)
-        if company.exists():
+        if company:
             self.check_object_permissions(request, company)
             return super().partial_update(request, *args, **kwargs)
         else:
@@ -48,7 +48,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk, *args, **kwargs):
         company = Company.objects.get(pk=pk)
-        if company.exists():
+        if company:
             self.check_object_permissions(request, company)
             return super().destroy(request, *args, **kwargs)
         else:
@@ -329,7 +329,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk, *args, **kwargs):
         event = Event.objects.get(pk=pk)
-        if event.exists():
+        if event:
             self.check_object_permissions(request, event)
             return super().update(request, *args, **kwargs)
         else:
@@ -337,7 +337,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, pk, *args, **kwargs):
         event = Event.objects.get(pk=pk)
-        if event.exists():
+        if event:
             self.check_object_permissions(request, event)
             return super().partial_update(request, *args, **kwargs)
         else:
@@ -345,7 +345,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk, *args, **kwargs):
         event = Event.objects.get(pk=pk)
-        if event.exists():
+        if event:
             self.check_object_permissions(request, event)
             return super().destroy(request, *args, **kwargs)
         else:
