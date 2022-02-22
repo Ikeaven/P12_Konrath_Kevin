@@ -54,7 +54,7 @@ class Contract(models.Model):
         settings.AUTH_USER_MODEL, related_name="contracts", on_delete=models.PROTECT
     )
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     contract_status = models.ForeignKey(
         Contract_Status, on_delete=models.PROTECT, default=0

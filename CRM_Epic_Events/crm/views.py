@@ -2,6 +2,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework.exceptions import NotFound
 from crm.permissions import (
     EventIsAdminOrSupportOwner,
     ClientIsAdminOrSalesOwner,
@@ -16,7 +18,6 @@ from crm.serializers import (
 from .models import Client, Company, Contract, Event
 
 
-# Create your views here.
 class CompanyViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing company instance.
@@ -90,6 +91,42 @@ class ClientFilteredBySales(generics.ListAPIView):
         return Response(serializer.data)
 
 
+class ClientFilteredByName(generics.ListAPIView):
+    """
+    Filter client by name
+    """
+
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, name):
+        client = Client.objects.filter(last_name=name)
+        if client.exists():
+            serializer = ClientSerializer(client, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Client not found !")
+
+
+class ClientFilteredByEmail(generics.ListAPIView):
+    """
+    Filter client by email
+    """
+
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, email):
+        client = Client.objects.filter(email=email)
+        if client.exists():
+            serializer = ClientSerializer(client, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Client not found !")
+
+
 class ClientCustomerList(generics.ListAPIView):
     """
     This view show all customer or not yet, your choice !
@@ -149,11 +186,14 @@ class ContractListBySales(generics.ListAPIView):
 
     def list(self, request, pk):
         contracts = Contract.objects.filter(sales_contact=pk)
-        serializer = ContractSerializer(contracts, many=True)
-        return Response(serializer.data)
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not Found")
 
 
-class ContractListByClient(generics.ListAPIView):
+class ContractListByClientID(generics.ListAPIView):
     """
     This view show all contract for a client
     """
@@ -164,8 +204,92 @@ class ContractListByClient(generics.ListAPIView):
 
     def list(self, request, pk):
         contracts = Contract.objects.filter(client__pk=pk)
-        serializer = ContractSerializer(contracts, many=True)
-        return Response(serializer.data)
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not found !")
+
+
+class ContractListByClientName(generics.ListAPIView):
+    """
+    This view show all contract for a client, with his name
+    """
+
+    queryset = Contract.objects.all()
+    serializer_class = ContractSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, name):
+        contracts = Contract.objects.filter(client__last_name=name)
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not found !")
+
+
+class ContractListByClientEmail(generics.ListAPIView):
+    """
+    This view show all contract for a client, with his email
+    """
+
+    queryset = Contract.objects.all()
+    serializer_class = ContractSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, email):
+        contracts = Contract.objects.filter(client__email=email)
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not found !")
+
+
+class ContractListByDate(generics.ListAPIView):
+    """
+    This view show all contracts created on a date
+    """
+
+    queryset = Contract.objects.all()
+    serializer_class = ContractSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, date):
+        contracts = Contract.objects.filter(date_created=date)
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not found !")
+
+
+class ContractListByAmount(generics.ListAPIView):
+    """
+    This view show all contracts created on a date
+    """
+
+    queryset = Contract.objects.all()
+    serializer_class = ContractSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, operator, amount):
+        if operator == "=":
+            contracts = Contract.objects.filter(amount=amount)
+        elif operator == "<":
+            contracts = Contract.objects.filter(amount__lte=amount)
+        elif operator == ">":
+            contracts = Contract.objects.filter(amount__gte=amount)
+        else:
+            raise NotFound(
+                detail="It is not a correct operator, you can use '=', '>' or '<' operators only"
+            )
+        if contracts.exists():
+            serializer = ContractSerializer(contracts, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Contract not found !")
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -191,3 +315,57 @@ class EventViewSet(viewsets.ModelViewSet):
         event = Event.objects.get(pk=pk)
         self.check_object_permissions(request, event)
         return super().destroy(request, *args, **kwargs)
+
+
+class EventFilteredByClientName(generics.ListAPIView):
+    """
+    This view show all events of a client, with his last name
+    """
+
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, name):
+        event = Event.objects.filter(contract__client__last_name=name)
+        if event.exists():
+            serializer = EventSerializer(event, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Event not found !")
+
+
+class EventFilteredByClientEmail(generics.ListAPIView):
+    """
+    This view show all events of a client, with his email
+    """
+
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, email):
+        event = Event.objects.filter(contract__client__email=email)
+        if event.exists():
+            serializer = EventSerializer(event, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Event not found !")
+
+
+class EventFilteredByDate(generics.ListAPIView):
+    """
+    This view show all events of a client, with his email
+    """
+
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, date):
+        event = Event.objects.filter(event_date__date=date)
+        if event.exists():
+            serializer = EventSerializer(event, many=True)
+            return Response(serializer.data)
+        else:
+            raise NotFound(detail="Event not found !")
