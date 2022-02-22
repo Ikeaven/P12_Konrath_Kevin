@@ -88,6 +88,7 @@ urlpatterns = [
         EventFilteredByDate.as_view(),
         name="event-list-by-date",
     ),
+    # path("", ApiRoot.as_view(), name=ApiRoot.name),
 ]
 
 
