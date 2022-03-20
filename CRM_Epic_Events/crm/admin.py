@@ -123,7 +123,10 @@ class EventAdmin(admin.ModelAdmin):
         ):
             return super().has_change_permission(request, obj)
         try:
-            if request.user == obj.contract.sales_contact:
+            if (
+                request.user == obj.contract.sales_contact
+                or request.user == obj.support_contact
+            ):
                 return True
             elif request.user.is_superuser:
                 return True
@@ -139,7 +142,10 @@ class EventAdmin(admin.ModelAdmin):
         ):
             return super().has_delete_permission(request, obj)
         try:
-            if request.user == obj.contract.sales_contact:
+            if (
+                request.user == obj.contract.sales_contact
+                or request.user == obj.support_contact
+            ):
                 return True
             elif request.user.is_superuser:
                 return True
