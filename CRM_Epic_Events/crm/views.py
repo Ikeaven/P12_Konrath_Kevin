@@ -29,7 +29,6 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     permission_classes = [
         IsAuthenticated,
-        ClientIsAdminOrSalesOwner,
         IsAdminOrSales,
     ]
 
