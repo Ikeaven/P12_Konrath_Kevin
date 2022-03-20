@@ -37,7 +37,7 @@ class ClientAdmin(admin.ModelAdmin):
         except AttributeError:
             pass
 
-    @admin.display(description="Is_customer")
+    @admin.display(description="Company is a customer")
     def company_is_customer(self, obj):
         return obj.company.is_customer
 
