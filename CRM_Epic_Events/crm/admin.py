@@ -5,6 +5,38 @@ from .models import Company, Client, Contract, Contract_Status, Event, Event_Sta
 
 
 class ClientAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_change_permission(request, obj)
+        try:
+            if request.user == obj.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
+    def has_delete_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_delete_permission(request, obj)
+        try:
+            if request.user == obj.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
     @admin.display(description="Is_customer")
     def company_is_customer(self, obj):
         return obj.company.is_customer
@@ -29,6 +61,38 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 class ContractAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_change_permission(request, obj)
+        try:
+            if request.user == obj.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
+    def has_delete_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_delete_permission(request, obj)
+        try:
+            if request.user == obj.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
     @admin.display(description="Company")
     def contract_company(self, obj):
         return obj.client.company
@@ -52,6 +116,38 @@ class ContractAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_change_permission(request, obj)
+        try:
+            if request.user == obj.contract.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
+    def has_delete_permission(self, request, obj=None):
+        if (
+            request.user.is_superuser
+            or request.user.groups.filter(name="Management").exists()
+        ):
+            return super().has_delete_permission(request, obj)
+        try:
+            if request.user == obj.contract.sales_contact:
+                return True
+            elif request.user.is_superuser:
+                return True
+            else:
+                return False
+        except AttributeError:
+            pass
+
     list_display = (
         "contract",
         "date_created",
