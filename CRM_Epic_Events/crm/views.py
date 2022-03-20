@@ -160,9 +160,9 @@ class ClientCustomerList(generics.ListAPIView):
     def list(self, request, int):
         # companys = Company.objects.filter(customer=True)
         if int:
-            clients = Client.objects.filter(company__customer=True)
+            clients = Client.objects.filter(company__is_customer=True)
         else:
-            clients = Client.objects.filter(company__customer=False)
+            clients = Client.objects.filter(company__is_customer=False)
         serializer = ClientSerializer(clients, many=True)
         return Response(serializer.data)
 
@@ -394,7 +394,7 @@ class EventFilteredByClientEmail(generics.ListAPIView):
 
 class EventFilteredByDate(generics.ListAPIView):
     """
-    This view show all events of a client, with his email
+    This view filter event by date.
     """
 
     queryset = Event.objects.all()

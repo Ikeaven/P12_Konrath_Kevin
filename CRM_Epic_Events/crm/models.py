@@ -9,7 +9,7 @@ class Company(models.Model):
     zip_code = models.IntegerField(blank=True, null=True)
     street_name = models.CharField(max_length=500, blank=True, null=True)
     address_number = models.IntegerField(blank=True, null=True)
-    customer = models.BooleanField(default=False)
+    is_customer = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.company_name
@@ -32,7 +32,7 @@ class Client(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} - {self.company}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Contract_Status(models.Model):
