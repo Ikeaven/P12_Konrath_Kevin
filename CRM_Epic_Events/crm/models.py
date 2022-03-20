@@ -15,7 +15,7 @@ class Company(models.Model):
         return self.company_name
 
     def set_customer_to_true(self):
-        Company.objects.filter(pk=self.pk).update(customer=True)
+        Company.objects.filter(pk=self.pk).update(is_customer=True)
 
 
 class Client(models.Model):

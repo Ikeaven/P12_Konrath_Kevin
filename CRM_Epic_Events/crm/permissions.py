@@ -6,14 +6,14 @@ class ClientIsAdminOrSalesOwner(permissions.BasePermission):
         if view.action in ["list", "retrieve"]:
             return True
         elif view.action == "create":
-            if request.user.is_staff:
+            if request.user.is_superuser:
                 return True
             elif request.user.groups.filter(name="Sales").exists():
                 return True
             else:
                 return False
         else:
-            if request.user.is_staff:
+            if request.user.is_superuser:
                 return True
             elif request.user == obj.sales_contact:
                 return True
@@ -26,7 +26,7 @@ class IsAdminOrSales(permissions.BasePermission):
         if view.action in ["list", "retrieve"]:
             return True
         elif view.action == "create":
-            if request.user.is_staff:
+            if request.user.is_superuser:
                 return True
             elif request.user.groups.filter(name="Sales").exists():
                 return True
@@ -41,14 +41,14 @@ class EventIsAdminOrSupportOwner(permissions.BasePermission):
         if view.action in ["list", "retrieve"]:
             return True
         elif view.action == "create":
-            if request.user.is_staff:
+            if request.user.is_superuser:
                 return True
             elif request.user.groups.filter(name="Sales").exists():
                 return True
             else:
                 return False
         else:
-            if request.user.is_staff:
+            if request.user.is_superuser:
                 return True
             elif request.user == obj.support_contact:
                 return True
